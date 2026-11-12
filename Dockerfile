@@ -65,8 +65,14 @@ RUN set -eux; \
       | tar -xz -C /usr/local/bin stern
 
 # ---- Shell experience -------------------------------------------------------
+# kubectl completion is generated once at build time (not on every shell start).
+RUN kubectl completion bash > /usr/share/bash-completion/completions/kubectl
+
 COPY motd.txt /etc/motd
-COPY bashrc /root/.bashrc
+# /etc/bash.bashrc applies to any HOME/UID; /root/.bashrc (Ubuntu's skel copy,
+# which would reset PS1 afterwards) is replaced with a stub.
+COPY bashrc /etc/bash.bashrc
+RUN echo '# see /etc/bash.bashrc' > /root/.bashrc
 
 WORKDIR /root
 ENTRYPOINT ["/bin/bash"]
