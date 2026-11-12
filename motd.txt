@@ -1,0 +1,15 @@
+
+ k8s-debug ephemeral container
+ ------------------------------------------------------------------
+  Network   dig nslookup curl nc socat tcpdump nmap mtr traceroute ss ip iptables conntrack iperf3 openssl
+  Process   ps top htop strace ltrace gdb lsof bpftrace pidstat iostat iotop
+  K8s       kubectl (k) stern grpcurl yq jq
+
+  Started with --target=<container>?  Shared process namespace:
+    ps aux                     see the target's processes
+    ls /proc/<pid>/root/       browse the target's filesystem
+    cat /proc/<pid>/environ | tr '\0' '\n'
+    strace -fp <pid>           needs SYS_PTRACE  (--profile=general)
+  Pod network namespace is always shared: ss -tulpn, tcpdump -i any
+    tcpdump needs NET_RAW/NET_ADMIN (--profile=netadmin)
+ ------------------------------------------------------------------
