@@ -11,9 +11,9 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 ARG TARGETARCH
 ARG KUBECTL_VERSION=v1.36.1
-ARG YQ_VERSION=v4.47.1
-ARG GRPCURL_VERSION=1.9.3
-ARG STERN_VERSION=1.33.0
+ARG YQ_VERSION=v4.54.3
+ARG GRPCURL_VERSION=1.9.4
+ARG STERN_VERSION=1.35.0
 # Set to "true" to bake in redis/postgres/mysql CLI clients (adds ~60MB).
 ARG INSTALL_DB_CLIENTS=false
 
