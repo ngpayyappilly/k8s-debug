@@ -9,6 +9,7 @@ on:
       - motd.txt
       - scripts/**
       - .hadolint.yaml
+      - .trivyignore
       - .github/workflows/**
 
 concurrency:
@@ -64,3 +65,27 @@ jobs:
 
       - name: Smoke test
         run: scripts/smoke-test.sh k8s-debug:pr
+
+      # Vulnerability scan (the vulnerability DB is arch independent, so one
+      # arch is enough). Report everything fixable at HIGH+, but only block the
+      # PR on fixable CRITICAL so an upstream HIGH disclosure cannot wedge
+      # unrelated PRs. Add justified exceptions to .trivyignore.
+      - name: Trivy report (HIGH+, fixable)
+        if: matrix.arch == 'amd64'
+        uses: aquasecurity/trivy-action@a9c7b0f06e461e9d4b4d1711f154ee024b8d7ab8 # v0.36.0
+        with:
+          image-ref: k8s-debug:pr
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: "0"
+          trivyignores: .trivyignore
+
+      - name: Trivy gate (CRITICAL, fixable)
+        if: matrix.arch == 'amd64'
+        uses: aquasecurity/trivy-action@a9c7b0f06e461e9d4b4d1711f154ee024b8d7ab8 # v0.36.0
+        with:
+          image-ref: k8s-debug:pr
+          severity: CRITICAL
+          ignore-unfixed: true
+          exit-code: "1"
+          trivyignores: .trivyignore

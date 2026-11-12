@@ -1,0 +1,3 @@
+# Trivy exceptions. One CVE id per line, each with a justification and an
+# expiry date so that suppressions do not live forever, e.g.
+#   CVE-2025-12345 exp:2026-12-31  # no fix upstream; not reachable (reason)
