@@ -20,6 +20,23 @@ docker buildx build --build-arg INSTALL_DB_CLIENTS=true ...
 
 Bump `KUBECTL_VERSION` etc. via `--build-arg` (keep kubectl within one minor of your cluster).
 
+## Releases (GitHub Actions → GHCR)
+
+[.github/workflows/publish.yml](.github/workflows/publish.yml) builds `linux/amd64` + `linux/arm64` and pushes to `ghcr.io/<owner>/<repo>`.
+
+| Trigger | Tags pushed |
+|---|---|
+| `git tag v1.2.3 && git push origin v1.2.3` | `1.2.3`, `1.2`, `1`, `latest` |
+| tag `v1.3.0-rc.1` | `1.3.0-rc.1` only |
+| tag `v0.x.y` | `0.x.y`, `0.x`, `latest` (no `0` major tag) |
+| push to `main` | `edge`, `sha-<short>` |
+
+Pin `1.2.3` (or the digest) in runbooks rather than `latest`.
+
+Pull requests run [.github/workflows/pr.yml](.github/workflows/pr.yml): hadolint, shellcheck, actionlint, then a native build on **both** amd64 and arm64 runners followed by [scripts/smoke-test.sh](scripts/smoke-test.sh), which checks every advertised tool exists and the pinned binaries execute. Run it locally with `docker build -t k8s-debug:dev . && scripts/smoke-test.sh k8s-debug:dev`. Nothing is pushed from PRs.
+
+One-time setup: after the first push, the package is private by default. Make it public (or grant your cluster's pull secret access) under the repo's **Packages → Package settings**. Repo **Settings → Actions → General → Workflow permissions** must allow write access to packages.
+
 ## Use it
 
 ```sh

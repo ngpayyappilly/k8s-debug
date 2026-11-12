@@ -6,6 +6,9 @@
 
 FROM ubuntu:24.04
 
+# Fail the build if any stage of a `curl | tar` pipe fails.
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 ARG TARGETARCH
 ARG KUBECTL_VERSION=v1.36.1
 ARG YQ_VERSION=v4.47.1
