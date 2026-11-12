@@ -67,20 +67,22 @@ RUN set -eux; \
     base="https://github.com/fullstorydev/grpcurl/releases/download/v${GRPCURL_VERSION}"; \
     f="grpcurl_${GRPCURL_VERSION}_linux_${A}.tar.gz"; \
     curl -fsSLo "/tmp/${f}" "${base}/${f}"; \
-    curl -fsSL "${base}/grpcurl_${GRPCURL_VERSION}_checksums.txt" | grep " ${f}\$" > /tmp/grpcurl.sha256; \
-    (cd /tmp && sha256sum -c grpcurl.sha256); \
+    want="$(curl -fsSL "${base}/grpcurl_${GRPCURL_VERSION}_checksums.txt" | awk -v f="${f}" '$2 == f {print $1}')"; \
+    test -n "$want"; \
+    echo "${want}  /tmp/${f}" | sha256sum -c -; \
     tar -xz -C /usr/local/bin -f "/tmp/${f}" grpcurl; \
-    rm -f "/tmp/${f}" /tmp/grpcurl.sha256
+    rm -f "/tmp/${f}"
 
 # stern (multi-pod log tailing), checksum verified
 RUN set -eux; \
     base="https://github.com/stern/stern/releases/download/v${STERN_VERSION}"; \
     f="stern_${STERN_VERSION}_linux_${TARGETARCH}.tar.gz"; \
     curl -fsSLo "/tmp/${f}" "${base}/${f}"; \
-    curl -fsSL "${base}/checksums.txt" | grep " ${f}\$" > /tmp/stern.sha256; \
-    (cd /tmp && sha256sum -c stern.sha256); \
+    want="$(curl -fsSL "${base}/checksums.txt" | awk -v f="${f}" '$2 == f {print $1}')"; \
+    test -n "$want"; \
+    echo "${want}  /tmp/${f}" | sha256sum -c -; \
     tar -xz -C /usr/local/bin -f "/tmp/${f}" stern; \
-    rm -f "/tmp/${f}" /tmp/stern.sha256
+    rm -f "/tmp/${f}"
 
 # ---- Shell experience -------------------------------------------------------
 COPY motd.txt /etc/motd
