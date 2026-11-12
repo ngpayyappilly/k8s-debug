@@ -1,0 +1,21 @@
+version: 2
+updates:
+  # Base image (ubuntu:24.04). Tag bumps and, once the FROM is digest-pinned,
+  # digest refreshes arrive as PRs that run the full build + smoke test.
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: "deps(docker)"
+
+  # GitHub Actions used by the workflows.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: "deps(actions)"
+    groups:
+      actions:
+        patterns: ["*"]
