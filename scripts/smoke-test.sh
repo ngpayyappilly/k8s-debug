@@ -6,10 +6,21 @@ set -euo pipefail
 IMAGE="${1:-k8s-debug:dev}"
 
 TOOLS=(
-  curl wget dig nslookup drill ping traceroute mtr tcpdump nmap ncat nc socat
-  ss ip iptables nft conntrack ethtool iperf3 openssl
-  strace ltrace gdb lsof htop pidstat iostat iotop bpftrace ps
-  jq yq kubectl stern grpcurl git ssh python3 vi nano
+  # HTTP and connectivity
+  curl wget nc ncat socat openssl iperf3 ping tracepath traceroute mtr nmap
+  # DNS
+  dig nslookup drill
+  # network stack
+  ip ss arping ethtool ifconfig netstat brctl
+  # packet capture and firewall
+  tcpdump iptables nft ipset conntrack
+  # processes and system
+  ps pgrep top free vmstat htop lsof fuser pstree pidstat iostat mpstat iotop
+  strace ltrace gdb bpftrace nsenter lsns findmnt dmesg lsmod lspci
+  # kubernetes and data
+  kubectl stern grpcurl yq jq
+  # shell and files
+  bash vi nano less file tree unzip xz git ssh gpg python3
 )
 
 fail=0
