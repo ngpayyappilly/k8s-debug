@@ -11,5 +11,5 @@
     cat /proc/<pid>/environ | tr '\0' '\n'
     strace -fp <pid>           needs SYS_PTRACE  (--profile=general)
   Pod network namespace is always shared: ss -tulpn, tcpdump -i any
-    tcpdump needs NET_RAW/NET_ADMIN (--profile=netadmin)
+    tcpdump works by default; iptables/conntrack need NET_ADMIN (--profile=netadmin)
  ------------------------------------------------------------------

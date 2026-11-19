@@ -2,6 +2,8 @@
 
 Ubuntu 24.04 image for `kubectl debug` ephemeral containers. Multi-arch (amd64 + arm64).
 
+**Documentation: <https://ngpayyappilly.github.io/k8s-debug/>**: every tool, install steps, permissions, and troubleshooting recipes.
+
 **Tools:** curl, wget, dig/nslookup/drill, ping, traceroute, mtr, tcpdump, nmap, ncat/nc, socat, ss/ip, iptables/nft, conntrack, ethtool, iperf3, openssl, strace, ltrace, gdb, lsof, htop, sysstat (pidstat/iostat), iotop, bpftrace, jq, yq, kubectl, stern, grpcurl, git, ssh, python3, vi/nano.
 
 ## Build and push
@@ -47,11 +49,11 @@ kubectl debug -it <pod> -n <ns> --image=<registry>/k8s-debug:1.0.0 \
 
 | Need | Profile | Grants |
 |---|---|---|
-| `ps`, `/proc/<pid>/root`, `strace` | `general` | `SYS_PTRACE` |
-| `tcpdump`, `iptables`, raw sockets | `netadmin` | `NET_ADMIN`, `NET_RAW` |
+| shell, `tcpdump`, `ping`, `ps`, `/proc/<pid>/root`, `strace`, `gdb` | `general` (default) | runtime defaults (incl. `NET_RAW`) + `SYS_PTRACE` |
+| `iptables`, `conntrack`, `ip link`/`route` changes | `netadmin` | runtime defaults + `NET_ADMIN` (no `SYS_PTRACE`) |
 | everything / node-level | `sysadmin` | privileged |
 
-Some tools need both ptrace and network caps. Profiles can't be combined, so use `netadmin` plus a custom patch, or `sysadmin` for a short session:
+Profiles can't be combined, and `--custom` capability lists *replace* the profile's, so list every capability you want:
 
 ```sh
 kubectl debug -it <pod> --image=... --target=<container> \

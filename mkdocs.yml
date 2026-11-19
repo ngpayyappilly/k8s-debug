@@ -1,0 +1,71 @@
+site_name: k8s-debug
+site_description: An ephemeral container image with the tools you need to debug Kubernetes pods and nodes live, and documentation for every utility in it.
+site_url: https://ngpayyappilly.github.io/k8s-debug/
+repo_url: https://github.com/ngpayyappilly/k8s-debug
+repo_name: ngpayyappilly/k8s-debug
+edit_uri: edit/main/docs/
+strict: true
+
+exclude_docs: |
+  requirements.txt
+
+validation:
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn
+  anchors: warn
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.top
+    - navigation.instant
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.action.edit
+    - toc.follow
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+
+nav:
+  - Home: index.md
+  - Getting started:
+      - Installation: getting-started/installation.md
+      - Permissions and profiles: getting-started/permissions.md
+  - Tools:
+      - Overview: tools/index.md
+      - HTTP and connectivity: tools/connectivity.md
+      - DNS: tools/dns.md
+      - Network stack: tools/network-stack.md
+      - Packet capture and firewall: tools/packets-firewall.md
+      - Processes and system: tools/processes.md
+      - Kubernetes and data: tools/kubernetes.md
+      - Shell and files: tools/shell.md
+  - Recipes: recipes.md
+  - Troubleshooting: troubleshooting.md
+  - Contributing: contributing.md
