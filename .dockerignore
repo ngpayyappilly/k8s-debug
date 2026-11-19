@@ -1,0 +1,5 @@
+# Allowlist: the build context only needs the files the Dockerfile COPYs.
+# Keeps .git, CI config and docs out of the context (faster, smaller, no leaks).
+*
+!motd.txt
+!bashrc
